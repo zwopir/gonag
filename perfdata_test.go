@@ -77,6 +77,46 @@ var splitPerfdataTestTable = []struct {
 	{"'label'=1;2;3;4;5 foo=3.14", []string{"'label'=1;2;3;4;5", "foo=3.14"}},
 }
 
+var newPerfdataTestTable = []struct {
+	in  string
+	out []*Perfdata
+}{
+	{"'label'=1;2;3;4;5 foo=3.14", []*Perfdata{
+		{
+			Label: "label",
+			Value: "1",
+			Thresholds: Thresholds{
+				Warn: "2",
+				Crit: "3",
+				Min:  "4",
+				Max:  "5",
+			},
+			UOM: &numbers{},
+		},
+		{
+			Label:      "foo",
+			Value:      "3.14",
+			Thresholds: Thresholds{},
+			UOM:        &numbers{},
+		},
+	}},
+}
+
+func TestNewPerfdata(t *testing.T) {
+	for _, tt := range newPerfdataTestTable {
+		actual, err := NewPerfdata(tt.in)
+		if err != nil {
+			t.Errorf(err.Error())
+		}
+		if !reflect.DeepEqual(actual, tt.out) {
+			// ToDo: create a meaningful error message
+			t.Errorf("Expected %v parsing perfdata string, got %v",
+				actual, tt.out)
+		}
+	}
+
+}
+
 func TestGetPerfdataSplitFunc(t *testing.T) {
 	splitFunc := GetPerfdataSplitFunc(" ")
 	for _, tt := range splitPerfdataTestTable {
