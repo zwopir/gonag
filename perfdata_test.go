@@ -96,3 +96,22 @@ func TestGetPerfdataSplitFunc(t *testing.T) {
 		}
 	}
 }
+
+var PerfdataIdentifierTestTable = []struct {
+	in  PerfdataIdentifier
+	out string
+}{
+	{Warn, "Warn"},
+	{Crit, "Crit"},
+	{Min, "Min"},
+	{Max, "Max"},
+}
+
+func TestPerfdataIdentifier_String(t *testing.T) {
+	for _, tt := range PerfdataIdentifierTestTable {
+		if tt.in.String() != tt.out {
+			t.Errorf("PerfdataIdentifier String() method returned %q, expected %q",
+				tt.in.String(), tt.out)
+		}
+	}
+}
