@@ -4,8 +4,8 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 type PerfdataIdentifier int
@@ -28,10 +28,10 @@ type Thresholds map[PerfdataIdentifier]string
 // Perfdata represents the performance data of a Nagios check. Values (Value, Warn, Crit, Min, Max) are encoded as
 // string, since there can be U (unknown), a number or not set (which is not the default initialization of a float/int)
 type Perfdata struct {
-	Label string
-	Value string
+	Label      string
+	Value      string
 	Thresholds Thresholds
-	UOM Uniter
+	UOM        Uniter
 }
 
 func NewPerfdataItem(perfdataItem string) (*Perfdata, error) {

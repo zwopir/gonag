@@ -1,7 +1,6 @@
 package gonag
 
-
-type Uniter interface{
+type Uniter interface {
 	String() string
 	Baseunit() string
 	Magnitude() int
@@ -19,14 +18,12 @@ const (
 	UNKNOWN
 )
 
-
 // CheckResult represents a Nagios Check Result
 type CheckResult struct {
-	Text string
+	Text       string
 	ReturnCode ReturnCode
-	Perfdata []*Perfdata
+	Perfdata   []*Perfdata
 }
-
 
 /*
 func NewFromPluginOutput(returnCode ReturnCode, pluginOutput string) (*CheckResult, error){
@@ -39,7 +36,3 @@ func NewFromPluginOutput(returnCode ReturnCode, pluginOutput string) (*CheckResu
 	}, err
 }
 */
-
-
-
-

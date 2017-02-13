@@ -2,21 +2,23 @@ package gonag
 
 import (
 	"fmt"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 type numbers struct{}
-func (*numbers) String() string {return ""}
-func (*numbers) Baseunit() string {return ""}
-func (*numbers) Magnitude() int {return 0}
+
+func (*numbers) String() string   { return "" }
+func (*numbers) Baseunit() string { return "" }
+func (*numbers) Magnitude() int   { return 0 }
 
 type counts struct{}
-func (*counts) String() string {return "c"}
-func (*counts) Baseunit() string {return "c"}
-func (*counts) Magnitude() int {return 0}
 
-type bytes struct{
+func (*counts) String() string   { return "c" }
+func (*counts) Baseunit() string { return "c" }
+func (*counts) Magnitude() int   { return 0 }
+
+type bytes struct {
 	magnitude int
 }
 
@@ -34,13 +36,13 @@ func (b *bytes) String() string {
 	return "B"
 }
 
-func (*bytes) Baseunit() string {return "B"}
+func (*bytes) Baseunit() string { return "B" }
 
 func (b *bytes) Magnitude() int {
 	return b.magnitude
 }
 
-type seconds struct{
+type seconds struct {
 	magnitude int
 }
 
@@ -54,16 +56,17 @@ func (s *seconds) String() string {
 	return "s"
 }
 
-func (*seconds) Baseunit() string {return "s"}
+func (*seconds) Baseunit() string { return "s" }
 
 func (s *seconds) Magnitude() int {
 	return s.magnitude
 }
 
 type percent struct{}
-func (*percent) String() string {return "%"}
-func (*percent) Baseunit() string {return "%"}
-func (*percent) Magnitude() int {return 0}
+
+func (*percent) String() string   { return "%" }
+func (*percent) Baseunit() string { return "%" }
+func (*percent) Magnitude() int   { return 0 }
 
 func parseUnitString(unitString string) (Uniter, error) {
 	switch {
@@ -73,9 +76,9 @@ func parseUnitString(unitString string) (Uniter, error) {
 	case len(unitString) == 1:
 		switch unitString {
 		case "s":
-			return &seconds{magnitude:0}, nil
+			return &seconds{magnitude: 0}, nil
 		case "B":
-			return &bytes{magnitude:0}, nil
+			return &bytes{magnitude: 0}, nil
 		case "c":
 			return &counts{}, nil
 		case "%":
@@ -83,29 +86,27 @@ func parseUnitString(unitString string) (Uniter, error) {
 		}
 		return nil, fmt.Errorf("unknown single character UOM string %s", unitString)
 	case unitString == "ms":
-		return &seconds{magnitude:-3}, nil
+		return &seconds{magnitude: -3}, nil
 	case unitString == "us":
-		return &seconds{magnitude:-6}, nil
+		return &seconds{magnitude: -6}, nil
 	case unitString == "KB":
-		return &bytes{magnitude:3}, nil
+		return &bytes{magnitude: 3}, nil
 	case unitString == "MB":
-		return &bytes{magnitude:6}, nil
+		return &bytes{magnitude: 6}, nil
 	case unitString == "GB":
-		return &bytes{magnitude:9}, nil
+		return &bytes{magnitude: 9}, nil
 	case unitString == "TB":
-		return &bytes{magnitude:12}, nil
+		return &bytes{magnitude: 12}, nil
 	}
 	return nil, fmt.Errorf("unknown UOM string %s", unitString)
 }
 
-
-
 func ParseValue(s string) (string, Uniter, error) {
 	unitString := ""
 	if strings.Contains("csB%", string(s[len(s)-1])) {
-		unitString = string(s[len(s) - 1])
-		if strings.Contains("muKMGT", string(s[len(s) - 2:len(s) - 1])) {
-			unitString = string(s[len(s) - 2:])
+		unitString = string(s[len(s)-1])
+		if strings.Contains("muKMGT", string(s[len(s)-2:len(s)-1])) {
+			unitString = string(s[len(s)-2:])
 		}
 	}
 	valueString := strings.TrimSuffix(s, unitString)
@@ -119,4 +120,3 @@ func ParseValue(s string) (string, Uniter, error) {
 	}
 	return valueString, uom, nil
 }
-

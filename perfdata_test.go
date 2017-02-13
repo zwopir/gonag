@@ -13,35 +13,34 @@ var perfdataTestTable = []struct {
 	perfdata     *Perfdata
 }{
 	{"'label'=3", &Perfdata{
-		Label:          "label",
-		Value:          "3",
+		Label:      "label",
+		Value:      "3",
 		Thresholds: nil,
-		UOM:            nil,
+		UOM:        nil,
 	}},
 	{"'label'=3.0", &Perfdata{
-		Label:          "label",
-		Value:          "3.0",
+		Label:      "label",
+		Value:      "3.0",
 		Thresholds: nil,
-		UOM:            nil,
+		UOM:        nil,
 	}},
 	{"'label with blanks'=3c", &Perfdata{
-		Label:          "label with blanks",
-		Value:          "3",
+		Label:      "label with blanks",
+		Value:      "3",
 		Thresholds: nil,
-		UOM:            &counts{},
+		UOM:        &counts{},
 	}},
 	{"n=3;4;5;0;10", &Perfdata{
-		Label:          "n",
-		Value:          "3",
+		Label: "n",
+		Value: "3",
 		Thresholds: Thresholds{
 			Warn: "4",
 			Crit: "5",
-			Min: "0",
-			Max: "10",
+			Min:  "0",
+			Max:  "10",
 		},
-		UOM:            &numbers{},
+		UOM: &numbers{},
 	}},
-
 }
 
 func TestNewPerfdataItem(t *testing.T) {
@@ -62,14 +61,13 @@ func TestNewPerfdataItem(t *testing.T) {
 		for idx, th := range actual.Thresholds {
 			if th != tt.perfdata.Thresholds[idx] {
 				t.Errorf("Got %s as Perfdata %s-Threshold for %q, expected %s",
-				th, idx, tt.perfdataItem, tt.perfdata.Thresholds[idx])
+					th, idx, tt.perfdataItem, tt.perfdata.Thresholds[idx])
 			} else {
 				t.Logf("Threshold (%s) of %q is %s", idx, tt.perfdataItem, th)
 			}
 		}
 	}
 }
-
 
 var splitPerfdataTestTable = []struct {
 	in  string

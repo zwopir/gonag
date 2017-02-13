@@ -4,8 +4,8 @@ import (
 	"testing"
 )
 
-var ReturnCodeStringerTestTable = []struct{
-	in ReturnCode
+var ReturnCodeStringerTestTable = []struct {
+	in  ReturnCode
 	out string
 }{
 	{OK, "OK"},
@@ -22,5 +22,3 @@ func TestReturnCode_String(t *testing.T) {
 		}
 	}
 }
-
-
