@@ -77,3 +77,52 @@ func TestNewFromPluginOutput(t *testing.T) {
 		}
 	}
 }
+
+var renderCheckResultTestTable = []struct {
+	checkResult *CheckResult
+	expected string
+	formatString string
+}{
+	{
+		&CheckResult{
+			Text:       "plugin text with blanks",
+			ReturnCode: OK,
+			Perfdata: []*Perfdata{
+				{
+					Label:      "a",
+					Value:      "123.3",
+					Thresholds: Thresholds{},
+					UOM:        &counts{},
+				},
+				{
+					Label: "n",
+					Value: "5",
+					Thresholds: Thresholds{
+						Warn: "4",
+						Crit: "6",
+						Min:  "0",
+						Max:  "10",
+					},
+					UOM: &numbers{},
+				},
+				{
+					Label:      "free",
+					Value:      "8",
+					Thresholds: Thresholds{},
+					UOM:        &bytes{magnitude: 3},
+				},
+			}},
+		"OK - plugin text with blanks|a=123.3c n=5;4;6;0;10 free=8MB",
+		"{{ ReturnCode }} - {{ Text }}|{{ Perfdata }}",
+	},
+}
+
+func TestCheckResult_RenderCheckResult(t *testing.T) {
+	for _, tt := range renderCheckResultTestTable {
+		actual := tt.checkResult.RenderCheckResult(tt.formatString)
+		if actual != tt.expected {
+			t.Errorf("Rendering CheckResult failed, got %q, expected %q",
+				actual, tt.expected)
+		}
+	}
+}

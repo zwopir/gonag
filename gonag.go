@@ -44,3 +44,6 @@ func NewFromPluginOutput(returnCode ReturnCode, pluginOutput string) (*CheckResu
 	}, err
 }
 
+func (cr *CheckResult) RenderCheckResult(formatString string) string {
+	return "not implemented yet"
+}
