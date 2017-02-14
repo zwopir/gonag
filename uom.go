@@ -6,23 +6,23 @@ import (
 	"strings"
 )
 
-type numbers struct{}
+type numbersUOM struct{}
 
-func (*numbers) String() string   { return "" }
-func (*numbers) Baseunit() string { return "" }
-func (*numbers) Magnitude() int   { return 0 }
+func (*numbersUOM) String() string   { return "" }
+func (*numbersUOM) Baseunit() string { return "" }
+func (*numbersUOM) Magnitude() int   { return 0 }
 
-type counts struct{}
+type countsUOM struct{}
 
-func (*counts) String() string   { return "c" }
-func (*counts) Baseunit() string { return "c" }
-func (*counts) Magnitude() int   { return 0 }
+func (*countsUOM) String() string   { return "c" }
+func (*countsUOM) Baseunit() string { return "c" }
+func (*countsUOM) Magnitude() int   { return 0 }
 
-type bytes struct {
+type bytesUOM struct {
 	magnitude int
 }
 
-func (b *bytes) String() string {
+func (b *bytesUOM) String() string {
 	switch b.magnitude {
 	case 3:
 		return "KB"
@@ -36,17 +36,17 @@ func (b *bytes) String() string {
 	return "B"
 }
 
-func (*bytes) Baseunit() string { return "B" }
+func (*bytesUOM) Baseunit() string { return "B" }
 
-func (b *bytes) Magnitude() int {
+func (b *bytesUOM) Magnitude() int {
 	return b.magnitude
 }
 
-type seconds struct {
+type secondsUOM struct {
 	magnitude int
 }
 
-func (s *seconds) String() string {
+func (s *secondsUOM) String() string {
 	switch s.magnitude {
 	case -6:
 		return "us"
@@ -56,47 +56,47 @@ func (s *seconds) String() string {
 	return "s"
 }
 
-func (*seconds) Baseunit() string { return "s" }
+func (*secondsUOM) Baseunit() string { return "s" }
 
-func (s *seconds) Magnitude() int {
+func (s *secondsUOM) Magnitude() int {
 	return s.magnitude
 }
 
-type percent struct{}
+type percentUOM struct{}
 
-func (*percent) String() string   { return "%" }
-func (*percent) Baseunit() string { return "%" }
-func (*percent) Magnitude() int   { return 0 }
+func (*percentUOM) String() string   { return "%" }
+func (*percentUOM) Baseunit() string { return "%" }
+func (*percentUOM) Magnitude() int   { return 0 }
 
 func parseUnitString(unitString string) (Uniter, error) {
 	switch {
 	// no UOM given, return a base uniter
 	case len(unitString) == 0:
-		return &numbers{}, nil
+		return &numbersUOM{}, nil
 	case len(unitString) == 1:
 		switch unitString {
 		case "s":
-			return &seconds{magnitude: 0}, nil
+			return &secondsUOM{magnitude: 0}, nil
 		case "B":
-			return &bytes{magnitude: 0}, nil
+			return &bytesUOM{magnitude: 0}, nil
 		case "c":
-			return &counts{}, nil
+			return &countsUOM{}, nil
 		case "%":
-			return &percent{}, nil
+			return &percentUOM{}, nil
 		}
 		return nil, fmt.Errorf("unknown single character UOM string %s", unitString)
 	case unitString == "ms":
-		return &seconds{magnitude: -3}, nil
+		return &secondsUOM{magnitude: -3}, nil
 	case unitString == "us":
-		return &seconds{magnitude: -6}, nil
+		return &secondsUOM{magnitude: -6}, nil
 	case unitString == "KB":
-		return &bytes{magnitude: 3}, nil
+		return &bytesUOM{magnitude: 3}, nil
 	case unitString == "MB":
-		return &bytes{magnitude: 6}, nil
+		return &bytesUOM{magnitude: 6}, nil
 	case unitString == "GB":
-		return &bytes{magnitude: 9}, nil
+		return &bytesUOM{magnitude: 9}, nil
 	case unitString == "TB":
-		return &bytes{magnitude: 12}, nil
+		return &bytesUOM{magnitude: 12}, nil
 	}
 	return nil, fmt.Errorf("unknown UOM string %s", unitString)
 }

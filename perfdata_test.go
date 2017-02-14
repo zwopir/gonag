@@ -28,7 +28,7 @@ var perfdataTestTable = []struct {
 		Label:      "label with blanks",
 		Value:      "3",
 		Thresholds: nil,
-		UOM:        &counts{},
+		UOM:        &countsUOM{},
 	}},
 	{"n=3;4;5;0;10", &Perfdata{
 		Label: "n",
@@ -39,7 +39,7 @@ var perfdataTestTable = []struct {
 			Min:  "0",
 			Max:  "10",
 		},
-		UOM: &numbers{},
+		UOM: &numbersUOM{},
 	}},
 }
 
@@ -91,13 +91,13 @@ var newPerfdataTestTable = []struct {
 				Min:  "4",
 				Max:  "5",
 			},
-			UOM: &numbers{},
+			UOM: &numbersUOM{},
 		},
 		{
 			Label:      "foo",
 			Value:      "3.14",
 			Thresholds: Thresholds{},
-			UOM:        &numbers{},
+			UOM:        &numbersUOM{},
 		},
 	}},
 }

@@ -2,6 +2,8 @@ package gonag
 
 import (
 	"strings"
+	"text/template"
+	"os"
 )
 
 type Uniter interface {
@@ -44,6 +46,11 @@ func NewFromPluginOutput(returnCode ReturnCode, pluginOutput string) (*CheckResu
 	}, err
 }
 
-func (cr *CheckResult) RenderCheckResult(formatString string) string {
-	return "not implemented yet"
+func (cr *CheckResult) RenderCheckResult(formatString string) (string, error) {
+	tmpl, err := template.New("checkResult").Parse(formatString)
+	if err != nil {
+		return "", err
+	}
+	err = tmpl.Execute(os.Stdout, *cr)
+	return "not implemented yet", nil
 }

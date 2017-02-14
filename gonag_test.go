@@ -37,7 +37,7 @@ var pluginOutputTestTable = []struct {
 				Label: "a",
 				Value: "123.3",
 				Thresholds: Thresholds{},
-				UOM: &counts{},
+				UOM: &countsUOM{},
 			},
 			{
 				Label: "n",
@@ -48,13 +48,13 @@ var pluginOutputTestTable = []struct {
 					Min: "0",
 					Max: "10",
 				},
-				UOM: &numbers{},
+				UOM: &numbersUOM{},
 			},
 			{
 				Label: "free",
 				Value: "8",
 				Thresholds: Thresholds{},
-				UOM: &bytes{magnitude: 3},
+				UOM: &bytesUOM{magnitude: 3},
 			},
 		},
 	}},
@@ -92,7 +92,7 @@ var renderCheckResultTestTable = []struct {
 					Label:      "a",
 					Value:      "123.3",
 					Thresholds: Thresholds{},
-					UOM:        &counts{},
+					UOM:        &countsUOM{},
 				},
 				{
 					Label: "n",
@@ -103,23 +103,26 @@ var renderCheckResultTestTable = []struct {
 						Min:  "0",
 						Max:  "10",
 					},
-					UOM: &numbers{},
+					UOM: &numbersUOM{},
 				},
 				{
 					Label:      "free",
 					Value:      "8",
 					Thresholds: Thresholds{},
-					UOM:        &bytes{magnitude: 3},
+					UOM:        &bytesUOM{magnitude: 3},
 				},
 			}},
 		"OK - plugin text with blanks|a=123.3c n=5;4;6;0;10 free=8MB",
-		"{{ ReturnCode }} - {{ Text }}|{{ Perfdata }}",
+		"{{ .ReturnCode }} - {{ .Text }}|{{ .Perfdata }}",
 	},
 }
 
 func TestCheckResult_RenderCheckResult(t *testing.T) {
 	for _, tt := range renderCheckResultTestTable {
-		actual := tt.checkResult.RenderCheckResult(tt.formatString)
+		actual, err := tt.checkResult.RenderCheckResult(tt.formatString)
+		if err != nil {
+			t.Errorf(err.Error())
+		}
 		if actual != tt.expected {
 			t.Errorf("Rendering CheckResult failed, got %q, expected %q",
 				actual, tt.expected)
