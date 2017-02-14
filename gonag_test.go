@@ -1,8 +1,8 @@
 package gonag
 
 import (
-	"testing"
 	"reflect"
+	"testing"
 )
 
 var ReturnCodeStringerTestTable = []struct {
@@ -26,18 +26,18 @@ func TestReturnCode_String(t *testing.T) {
 
 var pluginOutputTestTable = []struct {
 	pluginOutput string
-	exitcode ReturnCode
-	expected *CheckResult
+	exitcode     ReturnCode
+	expected     *CheckResult
 }{
 	{"plugin text with blanks|a=123.3c n=5;4;6;0;10 free=8MB", OK, &CheckResult{
-		Text: "plugin text with blanks",
+		Text:       "plugin text with blanks",
 		ReturnCode: OK,
 		Perfdata: []*PerfdataItem{
 			{
-				Label: "a",
-				Value: "123.3",
+				Label:      "a",
+				Value:      "123.3",
 				Thresholds: Thresholds{},
-				UOM: &countsUOM{},
+				UOM:        &countsUOM{},
 			},
 			{
 				Label: "n",
@@ -45,16 +45,16 @@ var pluginOutputTestTable = []struct {
 				Thresholds: Thresholds{
 					Warn: "4",
 					Crit: "6",
-					Min: "0",
-					Max: "10",
+					Min:  "0",
+					Max:  "10",
 				},
 				UOM: &numbersUOM{},
 			},
 			{
-				Label: "free",
-				Value: "8",
+				Label:      "free",
+				Value:      "8",
 				Thresholds: Thresholds{},
-				UOM: &bytesUOM{magnitude: 3},
+				UOM:        &bytesUOM{magnitude: 3},
 			},
 		},
 	}},
@@ -79,8 +79,8 @@ func TestNewFromPluginOutput(t *testing.T) {
 }
 
 var renderCheckResultTestTable = []struct {
-	checkResult *CheckResult
-	expected string
+	checkResult  *CheckResult
+	expected     string
 	formatString string
 }{
 	{
