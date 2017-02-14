@@ -32,7 +32,7 @@ var pluginOutputTestTable = []struct {
 	{"plugin text with blanks|a=123.3c n=5;4;6;0;10 free=8MB", OK, &CheckResult{
 		Text: "plugin text with blanks",
 		ReturnCode: OK,
-		Perfdata: []*Perfdata{
+		Perfdata: []*PerfdataItem{
 			{
 				Label: "a",
 				Value: "123.3",
@@ -73,7 +73,7 @@ func TestNewFromPluginOutput(t *testing.T) {
 			t.Errorf("Text is %q, expected %q", actual.Text, tt.expected.Text)
 		}
 		if reflect.DeepEqual(tt.expected.Perfdata, actual.Perfdata) {
-			t.Errorf("Perfdata is %v, expected %v", actual.Perfdata, tt.expected.Perfdata)
+			t.Errorf("PerfdataItem is %v, expected %v", actual.Perfdata, tt.expected.Perfdata)
 		}
 	}
 }
@@ -87,7 +87,7 @@ var renderCheckResultTestTable = []struct {
 		&CheckResult{
 			Text:       "plugin text with blanks",
 			ReturnCode: OK,
-			Perfdata: []*Perfdata{
+			Perfdata: []*PerfdataItem{
 				{
 					Label:      "a",
 					Value:      "123.3",
@@ -113,7 +113,7 @@ var renderCheckResultTestTable = []struct {
 				},
 			}},
 		"OK - plugin text with blanks|a=123.3c n=5;4;6;0;10 free=8MB",
-		"{{ .ReturnCode }} - {{ .Text }}|{{ .Perfdata }}",
+		"{{ .ReturnCode }} - {{ .Text }}|{{ .PerfdataItem }}",
 	},
 }
 

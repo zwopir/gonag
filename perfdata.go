@@ -8,11 +8,11 @@ import (
 	"strings"
 )
 
-type PerfdataIdentifier int
+type PerfdataThresholdIdentifier int
 
-//go:generate stringer -type=PerfdataIdentifier
+//go:generate stringer -type=PerfdataThresholdIdentifier
 const (
-	Warn PerfdataIdentifier = iota
+	Warn PerfdataThresholdIdentifier = iota
 	Crit
 	Min
 	Max
@@ -23,18 +23,18 @@ var (
 	ErrEmptyValue   = errors.New("Empty perfdata value")
 )
 
-type Thresholds map[PerfdataIdentifier]string
+type Thresholds map[PerfdataThresholdIdentifier]string
 
-// Perfdata represents the performance data of a Nagios check. Values (Value, Warn, Crit, Min, Max) are encoded as
+// PerfdataItem represents the performance data of a Nagios check. Values (Value, Warn, Crit, Min, Max) are encoded as
 // string, since there can be U (unknown), a number or not set (which is not the default initialization of a float/int)
-type Perfdata struct {
+type PerfdataItem struct {
 	Label      string
 	Value      string
 	Thresholds Thresholds
 	UOM        Uniter
 }
 
-func (pd *Perfdata) String() string {
+func (pd *PerfdataItem) String() string {
 	label := pd.Label
 	if strings.Contains(label, " ") {
 		label = fmt.Sprintf("'%s'", label)
@@ -48,8 +48,8 @@ func (pd *Perfdata) String() string {
 	)
 }
 
-func NewPerfdataItem(perfdataItem string) (*Perfdata, error) {
-	perfdata := Perfdata{
+func NewPerfdataItem(perfdataItem string) (*PerfdataItem, error) {
+	perfdata := PerfdataItem{
 		Thresholds: Thresholds{},
 	}
 	parts := strings.SplitAfterN(perfdataItem, "=", 2)
@@ -73,7 +73,7 @@ func NewPerfdataItem(perfdataItem string) (*Perfdata, error) {
 		v := strings.TrimSuffix(value, ";")
 		// ToDo: is silently ignoring parse errors ok here?
 		if _, err := strconv.ParseFloat(v, 32); err == nil {
-			perfdata.Thresholds[PerfdataIdentifier(idx)] = v
+			perfdata.Thresholds[PerfdataThresholdIdentifier(idx)] = v
 		} else {
 			fmt.Printf("skipping %s\n", v)
 		}
@@ -81,8 +81,8 @@ func NewPerfdataItem(perfdataItem string) (*Perfdata, error) {
 	return &perfdata, nil
 }
 
-func NewPerfdata(perfdataString string) ([]*Perfdata, error) {
-	perfdata := []*Perfdata{}
+func NewPerfdata(perfdataString string) ([]*PerfdataItem, error) {
+	perfdata := []*PerfdataItem{}
 	splitFunc := GetPerfdataSplitFunc(" ")
 	scanner := bufio.NewScanner(strings.NewReader(perfdataString))
 	scanner.Split(splitFunc)

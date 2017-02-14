@@ -28,7 +28,7 @@ const (
 type CheckResult struct {
 	Text       string
 	ReturnCode ReturnCode
-	Perfdata   []*Perfdata
+	Perfdata   []*PerfdataItem
 }
 
 

@@ -10,27 +10,27 @@ import (
 // 'label'=value[UOM];[warn];[crit];[min];[max]
 var perfdataTestTable = []struct {
 	perfdataItem string
-	perfdata     *Perfdata
+	perfdata     *PerfdataItem
 }{
-	{"'label'=3", &Perfdata{
+	{"'label'=3", &PerfdataItem{
 		Label:      "label",
 		Value:      "3",
 		Thresholds: nil,
 		UOM:        nil,
 	}},
-	{"'label'=3.0", &Perfdata{
+	{"'label'=3.0", &PerfdataItem{
 		Label:      "label",
 		Value:      "3.0",
 		Thresholds: nil,
 		UOM:        nil,
 	}},
-	{"'label with blanks'=3c", &Perfdata{
+	{"'label with blanks'=3c", &PerfdataItem{
 		Label:      "label with blanks",
 		Value:      "3",
 		Thresholds: nil,
 		UOM:        &countsUOM{},
 	}},
-	{"n=3;4;5;0;10", &Perfdata{
+	{"n=3;4;5;0;10", &PerfdataItem{
 		Label: "n",
 		Value: "3",
 		Thresholds: Thresholds{
@@ -60,7 +60,7 @@ func TestNewPerfdataItem(t *testing.T) {
 		}
 		for idx, th := range actual.Thresholds {
 			if th != tt.perfdata.Thresholds[idx] {
-				t.Errorf("Got %s as Perfdata %s-Threshold for %q, expected %s",
+				t.Errorf("Got %s as PerfdataItem %s-Threshold for %q, expected %s",
 					th, idx, tt.perfdataItem, tt.perfdata.Thresholds[idx])
 			} else {
 				t.Logf("Threshold (%s) of %q is %s", idx, tt.perfdataItem, th)
@@ -79,9 +79,9 @@ var splitPerfdataTestTable = []struct {
 
 var newPerfdataTestTable = []struct {
 	in  string
-	out []*Perfdata
+	out []*PerfdataItem
 }{
-	{"'label'=1;2;3;4;5 foo=3.14", []*Perfdata{
+	{"'label'=1;2;3;4;5 foo=3.14", []*PerfdataItem{
 		{
 			Label: "label",
 			Value: "1",
@@ -138,7 +138,7 @@ func TestGetPerfdataSplitFunc(t *testing.T) {
 }
 
 var PerfdataIdentifierTestTable = []struct {
-	in  PerfdataIdentifier
+	in  PerfdataThresholdIdentifier
 	out string
 }{
 	{Warn, "Warn"},
@@ -150,7 +150,7 @@ var PerfdataIdentifierTestTable = []struct {
 func TestPerfdataIdentifier_String(t *testing.T) {
 	for _, tt := range PerfdataIdentifierTestTable {
 		if tt.in.String() != tt.out {
-			t.Errorf("PerfdataIdentifier String() method returned %q, expected %q",
+			t.Errorf("PerfdataThresholdIdentifier String() method returned %q, expected %q",
 				tt.in.String(), tt.out)
 		}
 	}
