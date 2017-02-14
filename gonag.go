@@ -1,5 +1,9 @@
 package gonag
 
+import (
+	"strings"
+)
+
 type Uniter interface {
 	String() string
 	Baseunit() string
@@ -25,14 +29,18 @@ type CheckResult struct {
 	Perfdata   []*Perfdata
 }
 
-/*
+
 func NewFromPluginOutput(returnCode ReturnCode, pluginOutput string) (*CheckResult, error){
 	parts := strings.SplitAfterN(pluginOutput, "|", 2)
-	perfdata, err := NewPerfdataItem(parts[1])
+	text := strings.TrimSuffix(parts[0], "|")
+	perfdata, err := NewPerfdata(parts[1])
+	if err != nil {
+		return nil, err
+	}
 	return &CheckResult{
-		Text: parts[0],
+		Text: text,
 		ReturnCode: returnCode,
 		Perfdata: perfdata,
 	}, err
 }
-*/
+
