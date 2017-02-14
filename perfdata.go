@@ -34,6 +34,20 @@ type Perfdata struct {
 	UOM        Uniter
 }
 
+func (pd *Perfdata) String() string {
+	label := pd.Label
+	if strings.Contains(label, " ") {
+		label = fmt.Sprintf("'%s'", label)
+	}
+	return fmt.Sprintf("%s=%s%s;%s;%s;%s;%s",
+		pd.Label, pd.Value, pd.UOM,
+		pd.Thresholds[Warn],
+		pd.Thresholds[Crit],
+		pd.Thresholds[Min],
+		pd.Thresholds[Max],
+	)
+}
+
 func NewPerfdataItem(perfdataItem string) (*Perfdata, error) {
 	perfdata := Perfdata{
 		Thresholds: Thresholds{},

@@ -3,7 +3,7 @@ package gonag
 import (
 	"strings"
 	"text/template"
-	"os"
+	"bytes"
 )
 
 type Uniter interface {
@@ -51,6 +51,7 @@ func (cr *CheckResult) RenderCheckResult(formatString string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	err = tmpl.Execute(os.Stdout, *cr)
-	return "not implemented yet", nil
+	outputWriter := new(bytes.Buffer)
+	err = tmpl.Execute(outputWriter, *cr)
+	return outputWriter.String(), nil
 }
