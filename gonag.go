@@ -6,6 +6,10 @@ import (
 	"text/template"
 )
 
+const (
+	NagiosMRPEFormatter = "{{ .ReturnCode }} - {{ .Text }}|{{ .Perfdata }}"
+)
+
 type Uniter interface {
 	String() string
 	Baseunit() string
