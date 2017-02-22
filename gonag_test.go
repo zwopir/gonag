@@ -112,8 +112,8 @@ var renderCheckResultTestTable = []struct {
 					UOM:        &bytesUOM{magnitude: 3},
 				},
 			}},
-		"OK - plugin text with blanks|a=123.3c n=5;4;6;0;10 free=8MB",
-		"{{ .ReturnCode }} - {{ .Text }}|{{ .PerfdataItem }}",
+		"OK - plugin text with blanks|a=123.3c;;;; n=5;4;6;0;10 free=8KB;;;;",
+		"{{ .ReturnCode }} - {{ .Text }}|{{ .Perfdata }}",
 	},
 }
 

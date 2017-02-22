@@ -25,7 +25,18 @@ var (
 
 type Thresholds map[PerfdataThresholdIdentifier]string
 
-// PerfdataItem represents the performance data of a Nagios check. Values (Value, Warn, Crit, Min, Max) are encoded as
+// Perfdata represents the performance data of a Nagios check
+type Perfdata []*PerfdataItem
+
+func (pd Perfdata) String() string {
+	out := []string{}
+	for _, s := range pd {
+		out = append(out, fmt.Sprint(s))
+	}
+	return strings.Join(out, " ")
+}
+
+// PerfdataItem represents a single performance data item of a Nagios check. Values (Value, Warn, Crit, Min, Max) are encoded as
 // string, since there can be U (unknown), a number or not set (which is not the default initialization of a float/int)
 type PerfdataItem struct {
 	Label      string
@@ -40,7 +51,7 @@ func (pd *PerfdataItem) String() string {
 		label = fmt.Sprintf("'%s'", label)
 	}
 	return fmt.Sprintf("%s=%s%s;%s;%s;%s;%s",
-		pd.Label, pd.Value, pd.UOM,
+		label, pd.Value, pd.UOM,
 		pd.Thresholds[Warn],
 		pd.Thresholds[Crit],
 		pd.Thresholds[Min],
@@ -51,6 +62,10 @@ func (pd *PerfdataItem) String() string {
 func NewPerfdataItem(perfdataItem string) (*PerfdataItem, error) {
 	perfdata := PerfdataItem{
 		Thresholds: Thresholds{},
+	}
+	// initialize empty thresholds
+	for idx := 0; idx <= 3; idx++ {
+		perfdata.Thresholds[PerfdataThresholdIdentifier(idx)] = ""
 	}
 	parts := strings.SplitAfterN(perfdataItem, "=", 2)
 	perfdata.Label = strings.Trim(parts[0], "'=")
@@ -74,8 +89,6 @@ func NewPerfdataItem(perfdataItem string) (*PerfdataItem, error) {
 		// ToDo: is silently ignoring parse errors ok here?
 		if _, err := strconv.ParseFloat(v, 32); err == nil {
 			perfdata.Thresholds[PerfdataThresholdIdentifier(idx)] = v
-		} else {
-			fmt.Printf("skipping %s\n", v)
 		}
 	}
 	return &perfdata, nil

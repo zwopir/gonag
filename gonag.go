@@ -28,7 +28,7 @@ const (
 type CheckResult struct {
 	Text       string
 	ReturnCode ReturnCode
-	Perfdata   []*PerfdataItem
+	Perfdata   Perfdata
 }
 
 func NewFromPluginOutput(returnCode ReturnCode, pluginOutput string) (*CheckResult, error) {

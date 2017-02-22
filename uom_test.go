@@ -66,5 +66,4 @@ func TestParseValue(t *testing.T) {
 			t.Logf("correctly received an error parsing %q: %s", inputString, err)
 		}
 	}
-
 }

@@ -12,19 +12,19 @@ var perfdataTestTable = []struct {
 	perfdataItem string
 	perfdata     *PerfdataItem
 }{
-	{"'label'=3", &PerfdataItem{
+	{"label=3;;;;", &PerfdataItem{
 		Label:      "label",
 		Value:      "3",
 		Thresholds: nil,
-		UOM:        nil,
+		UOM:        &numbersUOM{},
 	}},
-	{"'label'=3.0", &PerfdataItem{
+	{"label=3.0;;;;", &PerfdataItem{
 		Label:      "label",
 		Value:      "3.0",
 		Thresholds: nil,
-		UOM:        nil,
+		UOM:        &numbersUOM{},
 	}},
-	{"'label with blanks'=3c", &PerfdataItem{
+	{"'label with blanks'=3c;;;;", &PerfdataItem{
 		Label:      "label with blanks",
 		Value:      "3",
 		Thresholds: nil,
@@ -69,6 +69,18 @@ func TestNewPerfdataItem(t *testing.T) {
 	}
 }
 
+
+
+func TestPerfdataItem_String(t *testing.T) {
+	for _, tt := range perfdataTestTable {
+		actual := tt.perfdata.String()
+		if actual != tt.perfdataItem {
+			t.Errorf("expected %q from perfdataItem.String(), got %q",
+			tt.perfdataItem, actual)
+		}
+	}
+}
+
 var splitPerfdataTestTable = []struct {
 	in  string
 	out []string
@@ -81,7 +93,7 @@ var newPerfdataTestTable = []struct {
 	in  string
 	out []*PerfdataItem
 }{
-	{"'label'=1;2;3;4;5 foo=3.14", []*PerfdataItem{
+	{"'label'=1;2;3;4;5 foo=3.14", Perfdata{
 		{
 			Label: "label",
 			Value: "1",
@@ -96,7 +108,12 @@ var newPerfdataTestTable = []struct {
 		{
 			Label:      "foo",
 			Value:      "3.14",
-			Thresholds: Thresholds{},
+			Thresholds: Thresholds{
+				Warn: "",
+				Crit: "",
+				Min: "",
+				Max: "",
+			},
 			UOM:        &numbersUOM{},
 		},
 	}},
@@ -109,8 +126,7 @@ func TestNewPerfdata(t *testing.T) {
 			t.Errorf(err.Error())
 		}
 		if !reflect.DeepEqual(actual, tt.out) {
-			// ToDo: create a meaningful error message
-			t.Errorf("Expected %v parsing perfdata string, got %v",
+			t.Errorf("Expected %s parsing perfdata string, got %s",
 				actual, tt.out)
 		}
 	}
@@ -147,7 +163,7 @@ var PerfdataIdentifierTestTable = []struct {
 	{Max, "Max"},
 }
 
-func TestPerfdataIdentifier_String(t *testing.T) {
+func TestPerfdataThresholdIdentifier_String(t *testing.T) {
 	for _, tt := range PerfdataIdentifierTestTable {
 		if tt.in.String() != tt.out {
 			t.Errorf("PerfdataThresholdIdentifier String() method returned %q, expected %q",
@@ -155,3 +171,6 @@ func TestPerfdataIdentifier_String(t *testing.T) {
 		}
 	}
 }
+
+
+
